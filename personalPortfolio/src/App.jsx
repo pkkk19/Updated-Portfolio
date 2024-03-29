@@ -1,35 +1,36 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import React, { Component } from "react";
+import Sphere from "./assets/sphere";
+import Text from "./assets/Text";
+import "./App.css";
 
-function App() {
-  const [count, setCount] = useState(0)
+import { Grid, GridItem } from "@chakra-ui/react";
 
-  return (
-    <>
+export default class extends Component {
+  state = { clicked: false };
+
+  handelClick = () => {
+    this.setState({ clicked: !this.state.clicked });
+  };
+  render() {
+    return (
       <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
-}
+        <div h="200%">
+          <Text />
+        </div>
 
-export default App
+        <Grid
+          h="100%"
+          templateRows="repeat(2, 1fr)"
+          templateColumns="repeat(6, 1fr)"
+          gap={4}
+        >
+          <GridItem marginTop="15%" rowSpan={4} colSpan={1}>
+            <Sphere className="sphere" />
+          </GridItem>
+          <GridItem marginTop="90%" colSpan={2} rowSpan={2}></GridItem>
+        </Grid>
+        <Grid></Grid>
+      </div>
+    );
+  }
+}
