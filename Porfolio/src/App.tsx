@@ -15,32 +15,33 @@ import {
   ListItemText,
   IconButton,
   useMediaQuery,
-  Switch,
   Divider,
   TextField,
   Stack
 } from '@mui/material';
 import { motion, AnimatePresence } from 'framer-motion';
+
 import { 
-  Brain, 
-  Code, 
-  Terminal, 
-  Cpu, 
-  MessageSquare, 
-  Github, 
-  Linkedin, 
-  Mail,
-  Home,
-  User,
-  Briefcase,
-  BookOpen,
-  ThumbsUp,
-  Download,
-  Menu,
-  Sun,
-  Moon,
-  Send
-} from 'lucide-react';
+  FaBrain, 
+  FaCode, 
+  FaTerminal,  
+  FaRegCommentDots, 
+  FaGithub, 
+  FaLinkedin, 
+  FaEnvelope,
+  FaHome,
+  FaUser,
+  FaBriefcase,
+  FaBookOpen,
+  FaThumbsUp,
+  FaDownload,
+  FaBars,
+  FaPaperPlane
+} from 'react-icons/fa';
+import { GoCpu } from 'react-icons/go';
+import { LuSunDim } from 'react-icons/lu';
+import { IoMoonOutline } from 'react-icons/io5';
+
 
 const getTheme = (mode: 'light' | 'dark') => createTheme({
   palette: {
@@ -60,12 +61,19 @@ const getTheme = (mode: 'light' | 'dark') => createTheme({
   typography: {
     fontFamily: '"Inter", "Roboto", "Arial", sans-serif', // More modern typography
     h1: {
-      fontSize: '3.2rem',
-      fontWeight: 700,
+      fontFamily:'Montserrat',
+      fontSize: '3.6rem',
+      fontWeight: 300,
     },
     h2: {
       fontSize: '2.2rem',
       fontWeight: 600,
+
+    },
+    h3:{
+      fontFamily: 'monospace',
+      fontSize:"1.6rem",
+      fontWeight:5,
     },
     body1: {
       fontSize: '1rem',
@@ -82,16 +90,16 @@ const sections = [
   { 
     id: 'home', 
     label: 'Home', 
-    icon: <Home size={24} />, 
+    icon: <FaHome size={24} />, 
     bg: {
-      dark: 'https://images.unsplash.com/photo-1507842217343-583bb7270b66?ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80',
+      dark: 'https://raw.githubusercontent.com/pkkk19/Updated-Portfolio/refs/heads/main/Porfolio/src/assets/hero-bg.jpg',
       light: 'https://images.unsplash.com/photo-1519682337058-a94d519337bc?ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80'
     }
   },
   { 
     id: 'about', 
     label: 'About Me', 
-    icon: <User size={24} />, 
+    icon: <FaUser size={24} />, 
     bg: {
       dark: 'https://images.unsplash.com/photo-1481627834876-b7833e8f5570?ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80',
       light: 'https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80'
@@ -100,7 +108,7 @@ const sections = [
   { 
     id: 'projects', 
     label: 'Projects', 
-    icon: <Code size={24} />, 
+    icon: <FaCode size={24} />, 
     bg: {
       dark: 'https://images.unsplash.com/photo-1537884944318-390069bb8665?ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80',
       light: 'https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80'
@@ -109,7 +117,7 @@ const sections = [
   { 
     id: 'experience', 
     label: 'Experience', 
-    icon: <Briefcase size={24} />, 
+    icon: <FaBriefcase size={24} />, 
     bg: {
       dark: 'https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80',
       light: 'https://images.unsplash.com/photo-1537884944318-390069bb8665?ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80'
@@ -118,7 +126,7 @@ const sections = [
   { 
     id: 'blogs', 
     label: 'Blogs', 
-    icon: <BookOpen size={24} />, 
+    icon: <FaBookOpen size={24} />, 
     bg: {
       dark: 'https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80',
       light: 'https://images.unsplash.com/photo-1481627834876-b7833e8f5570?ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80'
@@ -127,7 +135,7 @@ const sections = [
   { 
     id: 'recommendations', 
     label: 'Recommendations', 
-    icon: <ThumbsUp size={24} />, 
+    icon: <FaThumbsUp size={24} />, 
     bg: {
       dark: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80',
       light: 'https://images.unsplash.com/photo-1507842217343-583bb7270b66?ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80'
@@ -136,7 +144,7 @@ const sections = [
   { 
     id: 'contact', 
     label: 'Contact', 
-    icon: <Mail size={24} />, 
+    icon: <FaEnvelope size={24} />, 
     bg: {
       dark: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80',
       light: 'https://images.unsplash.com/photo-1519682337058-a94d519337bc?ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80'
@@ -227,17 +235,11 @@ function App() {
       ? 'linear-gradient(180deg, rgba(17, 24, 39, 0.9) 0%, rgba(30, 41, 59, 0.8) 100%)' // Deep navy gradient
       : 'linear-gradient(180deg, rgba(241, 245, 249, 0.51) 0%, rgba(219, 234, 254, 0.06) 100%)', // Light blue tint
     }}>
-      <Box sx={{ p: 2, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-        <Typography variant="h6" sx={{ flexGrow: 1 }}>Navigation</Typography>
-        <Box sx={{ display: 'flex', alignItems: 'center' }}>
-          <Sun size={16} />
-          <Switch
-            checked={mode === 'dark'}
-            onChange={() => setMode(mode === 'dark' ? 'light' : 'dark')}
-          />
-          <Moon size={16} />
-        </Box>
-      </Box>
+      <Box sx={{ p: 2, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+  <Typography variant="h3" sx={{ position: 'relative' }}>Prabesh Kumar</Typography>
+  <Typography variant="h3" sx={{ position: 'relative' }}>Shrestha</Typography>
+</Box>
+
       <Divider />
       <List>
         {sections.map((section) => (
@@ -258,6 +260,43 @@ function App() {
           </ListItem>
         ))}
       </List>
+      <Box sx={{ p: 2, display: 'flex', mt: 'auto' }}>
+      <IconButton
+        onClick={() => setMode(mode === 'dark' ? 'light' : 'dark')}
+        sx={{
+          position: "absolute",
+          bottom: 15,
+          left: '50%',
+          transform: 'translateX(-50%)',
+          width: 45,
+          height: 45,
+          borderRadius: '50%',
+          backgroundColor: mode === 'dark' ? '#ffffff' : '#000000', // Base background color
+          color: mode === 'dark' ? '#000000' : '#ffffff',           // Base icon color
+          boxShadow: `
+            0px 4px 6px rgba(0, 0, 0, 0.1),
+            0px 1px 3px rgba(0, 0, 0, 0.08) inset,
+            0px -1px 3px rgba(255, 255, 255, 0.1) inset
+          `,
+          transition: 'transform 0.3s ease, box-shadow 0.3s ease',
+          '&:hover': {
+            transform: 'translateX(-50%) scale(1.05)', // Scale effect only
+            backgroundColor: mode === 'dark' ? '#ffffff' : '#000000', // Force same background
+            color: mode === 'dark' ? '#000000' : '#ffffff',           // Force same icon color
+            boxShadow: `
+              0px 6px 8px rgba(0, 0, 0, 0.15),
+              0px 2px 4px rgba(0, 0, 0, 0.1) inset,
+              0px -2px 4px rgba(255, 255, 255, 0.15) inset
+            `,
+          },
+          '&:focus': {
+            outline: '2px solidrgb(19, 34, 57)',
+          },
+        }}
+      >
+        {mode === 'dark' ? <LuSunDim size={35} color="inherit" /> : <IoMoonOutline size={35} color="inherit" />}
+      </IconButton>
+    </Box>
     </Box>
   );
 
@@ -273,7 +312,7 @@ function App() {
           minHeight: '100vh',
           backgroundImage: `linear-gradient(180deg, ${
             isDark
-              ? 'rgba(15, 23, 42, 0.92) 0%, rgba(30, 41, 59, 0.88) 100%'
+              ? 'rgba(15, 23, 42, 0.92) 0%, rgba(30, 41, 59, 0.49) 100%'
               : 'rgba(241, 245, 249, 0.54) 0%, rgba(219, 234, 254, 0.21) 100%'
           }), url(${section?.bg[isDark ? 'dark' : 'light']})`,
           backgroundAttachment: 'fixed',
@@ -349,7 +388,7 @@ function App() {
               onClick={handleDrawerToggle}
               sx={{ position: 'fixed', top: 16, right: 16, zIndex: 1100 }}
             >
-              <Menu />
+              <FaBars />
             </IconButton>
           )}
 
@@ -411,7 +450,7 @@ function App() {
 
           {/* About Section */}
           <SectionContainer id="about">
-            <Typography variant="h2" sx={{ mb: 4, color: 'white' }}>About Me</Typography>
+            <Typography variant="h2" sx={{ mb: 4, color: (theme) => theme.palette.mode === 'light' ? 'black' : 'white'  }}>About Me</Typography>
             <Grid container spacing={4}>
               <Grid item xs={12} md={6}>
                 <MotionPaper
@@ -431,7 +470,7 @@ function App() {
                 >
                   <Typography variant="h6" sx={{ mb: 2 }}>Education</Typography>
                   <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-                    <Brain size={24} style={{ marginRight: '8px' }} />
+                    <FaBrain size={24} style={{ marginRight: '8px' }} />
                     <Typography>BSc Computer Science</Typography>
                   </Box>
                   <Typography variant="body2" color="text.secondary">
@@ -440,7 +479,7 @@ function App() {
                   <Button
                     variant="contained"
                     color="primary"
-                    startIcon={<Download />}
+                    startIcon={<FaDownload />}
                     sx={{ mt: 3 }}
                     href="/path-to-your-cv.pdf"
                     download
@@ -467,7 +506,7 @@ function App() {
                 >
                   <Typography variant="h6" sx={{ mb: 2 }}>Current Focus</Typography>
                   <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-                    <MessageSquare size={24} style={{ marginRight: '8px' }} />
+                    <FaRegCommentDots size={24} style={{ marginRight: '8px' }} />
                     <Typography>Natural Language Processing</Typography>
                   </Box>
                   <Typography variant="body2" color="text.secondary">
@@ -480,7 +519,7 @@ function App() {
 
           {/* Projects Section */}
           <SectionContainer id="projects">
-            <Typography variant="h2" sx={{ mb: 4, color: 'white' }}>Projects</Typography>
+            <Typography variant="h2" sx={{ mb: 4, color: (theme) => theme.palette.mode === 'light' ? 'black' : 'white'  }}>Projects</Typography>
             <Grid container spacing={4}>
               {[1, 2, 3].map((_, index) => (
                 <Grid item xs={12} md={4} key={index}>
@@ -500,7 +539,7 @@ function App() {
                     }}
                   >
                     <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center' }}>
-                      <Code size={32} />
+                      <FaCode size={32} />
                       <Typography variant="h6" sx={{ my: 2 }}>Project {index + 1}</Typography>
                       <Typography variant="body2" color="text.secondary">
                         Description of project {index + 1}
@@ -514,12 +553,12 @@ function App() {
 
           {/* Experience Section */}
           <SectionContainer id="experience">
-            <Typography variant="h2" sx={{ mb: 4, color: 'white' }}>Experience</Typography>
+            <Typography variant="h2" sx={{ mb: 4, color: (theme) => theme.palette.mode === 'light' ? 'black' : 'white'  }}>Experience</Typography>
             <Grid container spacing={4}>
               {[
-                { icon: <Code size={32} />, title: 'Programming', desc: 'Proficient in multiple programming languages' },
-                { icon: <Terminal size={32} />, title: 'Software Development', desc: 'Experience with modern development tools and practices' },
-                { icon: <Cpu size={32} />, title: 'Machine Learning', desc: 'Understanding of ML fundamentals and applications' },
+                { icon: <FaCode size={32} />, title: 'Programming', desc: 'Proficient in multiple programming languages' },
+                { icon: <FaTerminal size={32} />, title: 'Software Development', desc: 'Experience with modern development tools and practices' },
+                { icon: <GoCpu size={32} />, title: 'Machine Learning', desc: 'Understanding of ML fundamentals and applications' },
               ].map((item, index) => (
                 <Grid item xs={12} md={4} key={index}>
                   <MotionPaper
@@ -554,7 +593,7 @@ function App() {
 
           {/* Blogs Section */}
           <SectionContainer id="blogs">
-            <Typography variant="h2" sx={{ mb: 4, color: 'white' }}>Blogs</Typography>
+            <Typography variant="h2" sx={{ mb: 4, color: (theme) => theme.palette.mode === 'light' ? 'black' : 'white'  }}>Blogs</Typography>
             <Grid container spacing={4}>
               {[1, 2, 3].map((_, index) => (
                 <Grid item xs={12} md={4} key={index}>
@@ -574,7 +613,7 @@ function App() {
                     }}
                   >
                     <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center' }}>
-                      <BookOpen size={32} />
+                      <FaBookOpen size={32} />
                       <Typography variant="h6" sx={{ my: 2 }}>Blog Post {index + 1}</Typography>
                       <Typography variant="body2" color="text.secondary">
                         Description of blog post {index + 1}
@@ -588,7 +627,7 @@ function App() {
 
           {/* Recommendations Section */}
           <SectionContainer id="recommendations">
-            <Typography variant="h2" sx={{ mb: 4, color: 'white' }}>Recommendations</Typography>
+            <Typography variant="h2" sx={{ mb: 4, color: (theme) => theme.palette.mode === 'light' ? 'black' : 'white'  }}>Recommendations</Typography>
             <Grid container spacing={4}>
               {[1, 2, 3].map((_, index) => (
                 <Grid item xs={12} md={4} key={index}>
@@ -608,7 +647,7 @@ function App() {
                     }}
                   >
                     <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center' }}>
-                      <ThumbsUp size={32} />
+                      <FaThumbsUp size={32} />
                       <Typography variant="h6" sx={{ my: 2 }}>Recommendation {index + 1}</Typography>
                       <Typography variant="body2" color="text.secondary">
                         Recommendation text {index + 1}
@@ -622,8 +661,10 @@ function App() {
 
           {/* Contact Section */}
           <SectionContainer id="contact">
-            <Typography variant="h2" sx={{ mb: 4, color: 'white' }}>Contact</Typography>
+          
+            <Typography variant="h2" sx={{ mb: 4, color: (theme) => theme.palette.mode === 'light' ? 'black' : 'white'  }}>Contact</Typography>
             <Grid container spacing={4} justifyContent="center">
+              
               <Grid item xs={12} md={6}>
                 <MotionPaper
                   variants={itemVariants}
@@ -671,7 +712,7 @@ function App() {
                         variant="contained"
                         color="primary"
                         size="large"
-                        startIcon={<Send />}
+                        startIcon={<FaPaperPlane />}
                       >
                         Send Message
                       </Button>
@@ -682,9 +723,9 @@ function App() {
               <Grid item xs={12}>
   <Box sx={{ display: 'flex', justifyContent: 'center', gap: 2, mt: 4 }}>
     {[
-      { label: 'GitHub', icon: <Github /> },
-      { label: 'LinkedIn', icon: <Linkedin /> },
-      { label: 'Email', icon: <Mail /> },
+      { label: 'GitHub', icon: <FaGithub /> },
+      { label: 'LinkedIn', icon: <FaLinkedin /> },
+      { label: 'Email', icon: <FaEnvelope /> },
     ].map(({ label, icon }) => (
       <Button
         key={label}
