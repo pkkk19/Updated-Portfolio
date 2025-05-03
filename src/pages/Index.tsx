@@ -1,10 +1,75 @@
-
-import { motion } from "framer-motion";
+import React, { useRef, useState } from 'react';
+import { motion, AnimatePresence } from "framer-motion";
 import Background from "@/components/Background";
 import Navbar from "@/components/Navbar";
 import RainAnimation from "@/components/RainAnimation";
+import { FaCheckCircle } from 'react-icons/fa';
+import emailjs from '@emailjs/browser';
+
+const scrollToSection = (id: string) => {
+  const element = document.getElementById(id);
+  if (element) {
+    element.scrollIntoView({ behavior: "smooth" });
+  }
+};
+{/**contact function */}
+const Toast = ({ show }: { show: boolean }) => {
+  return (
+    <AnimatePresence>
+      {show && (
+        <motion.div
+          initial={{ opacity: 0, y: -50 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -20 }}
+          transition={{ duration: 0.3 }}
+          className="fixed top-4 left-1/2 transform -translate-x-1/2 glassmorphism p-4 rounded-lg border border-secondary/20 flex items-center gap-3 shadow-lg z-[1000]"
+          style={{ backdropFilter: "blur(16px)" }}
+        >
+          <div className="relative">
+            <FaCheckCircle className="text-green-400" size={20} />
+            {/* Progress bar */}
+            <motion.div
+              initial={{ width: '100%' }}
+              animate={{ width: '0%' }}
+              transition={{ duration: 4 }}
+              className="absolute -bottom-1 left-0 h-0.5 bg-green-400 rounded-full"
+            />
+          </div>
+          <div>
+            <p className="font-medium text-white">Message Sent!</p>
+            <p className="text-xs text-white/60">Thanks for reaching out</p>
+          </div>
+        </motion.div>
+      )}
+    </AnimatePresence>
+  );
+};
 
 const Index = () => {
+  const [toastVisible, setToastVisible] = useState(false);
+  const formRef = useRef<HTMLFormElement>(null);
+
+  const sendEmail = (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (!formRef.current) return;
+
+    emailjs.sendForm(
+      'service_u2zatqw', 
+      'template_bmxkuws', 
+      formRef.current, 
+      'O3Lq19ndmPRkjLGr8'
+    )
+    .then(() => {
+      setToastVisible(true);
+      formRef.current?.reset();
+      const timer = setTimeout(() => setToastVisible(false), 4000);
+      return () => clearTimeout(timer);
+    })
+    .catch((error) => {
+      console.error('Error sending email:', error);
+    });
+  };
   return (
     <main className="min-h-screen bg-background/50">
       <div className="background-image fixed inset-0 opacity-20" />
@@ -43,10 +108,14 @@ const Index = () => {
               transition={{ duration: 0.8, delay: 0.6 }}
               className="flex justify-center space-x-4"
             >
-              <button className="px-8 py-3 rounded-full bg-secondary text-primary hover:bg-secondary/80 transition-colors font-medium">
+              <button 
+              onClick={() => scrollToSection('projects')}
+              className="px-8 py-3 rounded-full bg-secondary text-primary hover:bg-secondary/80 transition-colors font-medium">
                 View Projects
               </button>
-              <button className="px-8 py-3 rounded-full border border-secondary text-secondary hover:bg-secondary/10 transition-colors font-medium">
+              <button 
+              onClick={() => scrollToSection('contact')}
+              className="px-8 py-3 rounded-full border border-secondary text-secondary hover:bg-secondary/10 transition-colors font-medium">
                 Contact Me
               </button>
             </motion.div>
@@ -87,6 +156,27 @@ const Index = () => {
             <p className="text-white/80 mb-4">
               During my academic journey, I've developed expertise in building and deploying machine learning models, with a particular focus on NLP applications and neural network architectures.
             </p>
+            {/* Download CV Button */}
+      {/* <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 0.2 }}
+        viewport={{ once: true }}
+        className="mt-6"
+      >
+        <a
+          href="" // Replace with your actual CV path
+          download="Prabesh_Kumar_Shrestha_CV.pdf"
+          className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-secondary text-primary hover:bg-secondary/80 transition-colors font-medium"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+            <polyline points="7 10 12 15 17 10"></polyline>
+            <line x1="12" y1="15" x2="12" y2="3"></line>
+          </svg>
+          Download CV
+        </a>
+      </motion.div> */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
               <div className="border border-secondary/20 rounded-lg p-4">
                 <h3 className="text-secondary font-bold mb-2">Education</h3>
@@ -201,26 +291,80 @@ const Index = () => {
       </section>
 
       {/* Contact Section */}
+      <Toast show={toastVisible} />
       <section id="contact" className="min-h-screen flex items-center justify-center">
         <div className="container mx-auto px-6">
           <h2 className="text-4xl font-bold text-secondary mb-8">Contact</h2>
           <div className="glassmorphism p-6 rounded-lg max-w-xl mx-auto">
-            <p className="text-white/80 mb-6 text-center">
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+              className="text-white/80 mb-6 text-center"
+            >
               Feel free to reach out for collaborations or just to say hi!
-            </p>
-            <form className="space-y-4">
-              <div>
-                <input type="text" placeholder="Name" className="w-full p-3 rounded-lg bg-white/5 border border-secondary/20 text-white/80 placeholder:text-white/40" />
-              </div>
-              <div>
-                <input type="email" placeholder="Email" className="w-full p-3 rounded-lg bg-white/5 border border-secondary/20 text-white/80 placeholder:text-white/40" />
-              </div>
-              <div>
-                <textarea placeholder="Message" rows={4} className="w-full p-3 rounded-lg bg-white/5 border border-secondary/20 text-white/80 placeholder:text-white/40"></textarea>
-              </div>
-              <button className="w-full px-8 py-3 rounded-lg bg-secondary text-primary hover:bg-secondary/80 transition-colors font-medium">
-                Send Message
-              </button>
+            </motion.p>
+            
+            <form 
+              ref={formRef}
+              onSubmit={sendEmail}
+              className="space-y-4"
+            >
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.1 }}
+              >
+                <input 
+                  type="text" 
+                  name="name"
+                  placeholder="Name" 
+                  className="w-full p-3 rounded-lg bg-white/5 border border-secondary/20 text-white/80 placeholder:text-white/40"
+                  required
+                />
+              </motion.div>
+              
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.2 }}
+              >
+                <input 
+                  type="email" 
+                  name="email"
+                  placeholder="Email" 
+                  className="w-full p-3 rounded-lg bg-white/5 border border-secondary/20 text-white/80 placeholder:text-white/40"
+                  required
+                />
+              </motion.div>
+              
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.4 }}
+              >
+                <textarea 
+                  name="message"
+                  placeholder="Message" 
+                  rows={4} 
+                  className="w-full p-3 rounded-lg bg-white/5 border border-secondary/20 text-white/80 placeholder:text-white/40"
+                  required
+                ></textarea>
+              </motion.div>
+              
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.5 }}
+                className="pt-2"
+              >
+                <button 
+                  type="submit"
+                  className="w-full px-8 py-3 rounded-lg bg-secondary text-primary hover:bg-secondary/80 transition-colors font-medium"
+                >
+                  Send Message
+                </button>
+              </motion.div>
             </form>
           </div>
         </div>

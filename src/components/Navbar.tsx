@@ -28,7 +28,10 @@ const Navbar = () => {
       <div className="container mx-auto px-6">
         <div className="glassmorphism rounded-full py-2 px-4 border border-secondary/20 relative" style={{ backdropFilter: "blur(16px)" }}>
           {/* Mobile Menu Button */}
-          <div className="md:hidden flex justify-end">
+          <div className="md:hidden flex items-center justify-between">
+            <div className="flex-1 text-center">
+              <span className="text-secondary font-medium">Prabesh Shrestha</span>
+            </div>
             <button
               onClick={toggleMenu}
               className="text-secondary hover:text-white transition-colors"
@@ -55,9 +58,9 @@ const Navbar = () => {
               exit={{ opacity: 0, scale: 0.95 }}
               className="md:hidden absolute top-full left-1/2 transform -translate-x-1/2 mt-2 w-[200px]"
             >
-              <div className="rounded-lg py-2 border border-secondary/20" style={{ 
-                background: "rgba(255, 255, 255, 0.08)",
-                backdropFilter: "blur(20px)"
+              <div className="glassmorphism rounded-lg py-2 border border-secondary/20" style={{ 
+                background: "rgba(0, 0, 0, 0.74)",
+                backdropFilter: "blur(100px)"
               }}>
                 <ul className="flex flex-col">
                   <NavItemMobile icon={<Home size={20} />} id="home" label="Home" onClick={handleNavClick} />
