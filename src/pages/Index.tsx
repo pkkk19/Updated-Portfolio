@@ -27,7 +27,7 @@ const Toast = ({ show }: { show: boolean }) => {
         >
           <div className="relative">
             <FaCheckCircle className="text-green-400" size={20} />
-            {/* Progress bar */}
+            {/* Toast progress bar */}
             <motion.div
               initial={{ width: '100%' }}
               animate={{ width: '0%' }}
@@ -47,11 +47,20 @@ const Toast = ({ show }: { show: boolean }) => {
 
 const Index = () => {
   const [toastVisible, setToastVisible] = useState(false);
+  const [isSending, setIsSending] = useState(false);
+  const [progress, setProgress] = useState(0);
   const formRef = useRef<HTMLFormElement>(null);
 
   const sendEmail = (e: React.FormEvent) => {
     e.preventDefault();
-    
+    setIsSending(true);
+    setProgress(0);
+
+    // Simulate progress (or use actual upload progress if available)
+    const progressInterval = setInterval(() => {
+      setProgress(prev => Math.min(prev + 10, 90)); // Cap at 90% until completion
+    }, 200);
+
     if (!formRef.current) return;
 
     emailjs.sendForm(
@@ -61,13 +70,19 @@ const Index = () => {
       'O3Lq19ndmPRkjLGr8'
     )
     .then(() => {
+      setProgress(100);
+      clearInterval(progressInterval);
       setToastVisible(true);
       formRef.current?.reset();
-      const timer = setTimeout(() => setToastVisible(false), 4000);
-      return () => clearTimeout(timer);
+      setTimeout(() => {
+        setIsSending(false);
+        setToastVisible(false);
+      }, 4000);
     })
     .catch((error) => {
       console.error('Error sending email:', error);
+      clearInterval(progressInterval);
+      setIsSending(false);
     });
   };
   return (
@@ -353,18 +368,36 @@ const Index = () => {
               </motion.div>
               
               <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.5 }}
-                className="pt-2"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.5 }}
+              className="pt-2 relative"
+            >
+              {/* Progress Bar */}
+              {isSending && (
+                <div className="w-full bg-secondary/20 h-1.5 rounded-full mb-2 overflow-hidden">
+                  <motion.div
+                    className="h-full bg-secondary rounded-full"
+                    initial={{ width: '0%' }}
+                    animate={{ width: `${progress}%` }}
+                    transition={{ duration: 0.3 }}
+                  />
+                </div>
+              )}
+              
+              <button 
+                type="submit"
+                disabled={isSending}
+                className={`w-full px-8 py-3 rounded-lg transition-colors font-medium ${
+                  isSending 
+                    ? 'bg-gray-500 text-gray-300 cursor-not-allowed' 
+                    : 'bg-secondary text-primary hover:bg-secondary/80'
+                }`}
               >
-                <button 
-                  type="submit"
-                  className="w-full px-8 py-3 rounded-lg bg-secondary text-primary hover:bg-secondary/80 transition-colors font-medium"
-                >
-                  Send Message
-                </button>
-              </motion.div>
+                {isSending ? 'Sending...' : 'Send Message'}
+              </button>
+            </motion.div>
+
             </form>
           </div>
         </div>
